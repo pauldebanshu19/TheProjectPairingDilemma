@@ -16,6 +16,10 @@ Predict whether a student prefers working Solo (0) or in a Team (1) from a small
 - requirements.txt — Python dependencies
 - .gitignore — ignores cache/checkpoints and IDE clutter
 
+## Model Pipeline
+
+![alt text](project-1.jpg)
+
 ## Quick start
 Prereqs: Python 3.9+ and pip.
 
