@@ -14,7 +14,6 @@ Predict whether a student prefers working Solo (0) or in a Team (1) from a small
 - project.ipynb — main notebook with data cleaning, modeling, tuning, and evaluation
 - data.csv — input dataset (expected in repo root)
 - requirements.txt — Python dependencies
-- .gitignore — ignores cache/checkpoints and IDE clutter
 
 ## Model Pipeline
 
