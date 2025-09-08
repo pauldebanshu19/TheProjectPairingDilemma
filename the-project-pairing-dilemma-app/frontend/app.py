@@ -10,6 +10,7 @@ st.set_page_config(layout="wide")
 
 st.title("Project Pairing Dilemma: Team vs. Solo")
 
+
 # Initialize session state for page navigation
 if 'page' not in st.session_state:
     st.session_state.page = 'form'
@@ -169,13 +170,17 @@ def show_form():
                 }
             ))
             st.plotly_chart(fig)
-
-            st.success("Prediction successful! Redirecting to the dashboard.")
+            
+            
+            st.success("Prediction completed successfully!")
             st.session_state.page = 'dashboard'
-            st.rerun()
-
+            if st.button("View Dashboard"):
+                st.rerun()
+                
+                
         except requests.exceptions.RequestException as e:
-            st.error(f"Error connecting to the backend: {e}")
+          st.error(f"Error connecting to the backend: {e}")        
+
 
 def show_dashboard():
     st.title("📊 Real-Time Project Preference Dashboard")
@@ -227,6 +232,8 @@ def show_dashboard():
         st.warning(f"Could not load data visualizations: {e}")
     except KeyError:
         st.error("Received invalid data from the backend. Please ensure the backend is running correctly.")
+
+        
 
 # Page router
 if st.session_state.page == 'form':
