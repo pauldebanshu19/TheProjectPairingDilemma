@@ -1,65 +1,68 @@
 # The Project Pairing Dilemma: Team vs Solo Preference Predictor
 
-Predict whether a student prefers working Solo (0) or in a Team (1) from a small survey. The notebook auto-detects messy CSV headers, cleans inputs, and compares multiple ML models with cross-validated hyperparameter search and threshold tuning.
+This project predicts whether a student prefers working "Solo" or in a "Team" based on a small survey. It features a Streamlit web application for user interaction and a FastAPI backend that serves predictions from a trained machine learning model.
 
-## Project highlights
-- Robust column detection for noisy/messy CSV headers (whitespace/newlines/symbols).
-- Features: introversion_extraversion, risk_taking, club_top1, weekly_hobby_hours.
-- Target: teamwork_preference (Likert 1–5). Binarized as Solo (1–2) vs Team (4–5). Neutral (3) rows dropped.
-- Models compared: Logistic Regression, Random Forest, Linear SVM, KNN, HistGradientBoosting.
-- Speed-ups: cached preprocessing, randomized search, fewer CV folds, fast estimators.
-- Evaluation: accuracy, balanced accuracy, ROC-AUC, confusion matrices, ROC overlay, CV-based threshold tuning.
+## Project Highlights
+- **Interactive Web App**: A user-friendly interface built with Streamlit to input personal preferences and receive a prediction.
+- **FastAPI Backend**: A robust backend to handle prediction requests, manage data, and serve model insights.
+- **Real-Time Dashboard**: A dynamic dashboard that visualizes the distribution of user preferences and other data features.
+- **Automated ML Pipeline**: The Jupyter notebook (`project.ipynb`) handles data cleaning, preprocessing, model training, and serialization.
 
-## Repository structure
-- project.ipynb — main notebook with data cleaning, modeling, tuning, and evaluation
-- data.csv — input dataset (expected in repo root)
-- requirements.txt — Python dependencies
+## Repository Structure
+- **`model_notebook/`**:
+  - `project.ipynb`: The Jupyter notebook for data exploration, model training, and saving the final pipeline.
+- **`the-project-pairing-dilemma-app/`**:
+  - **`backend/`**:
+    - `main.py`: The FastAPI application that serves the model and data.
+    - `model.pkl`: The serialized, pre-trained machine learning model.
+    - `data.csv`: The original, static dataset.
+    - `newdata.csv`: The growing dataset that includes new submissions from the web app.
+  - **`frontend/`**:
+    - `app.py`: The Streamlit application for user input and displaying predictions.
+- **`requirements.txt`**: A single file listing all dependencies for the project.
+- **`README.md`**: This file.
 
-## Quick start
-Prereqs: Python 3.9+ and pip.
+## Quick Start
 
-1) Install dependencies
-   pip install -r requirements.txt
+### Prerequisites
+- Python 3.9+
+- pip
 
-2) Launch the notebook
-   jupyter notebook project.ipynb
+### 1. Install Dependencies
+Install all required Python libraries by running the following command in your terminal:
+```bash
+pip install -r requirements.txt
+```
 
-3) Run all cells. A cache directory sklearn_cache/ will be created to speed up repeated runs.
+### 2. Train the Model
+Before running the application, you need to train the model and create the `model.pkl` file.
+1.  Navigate to the `model_notebook/` directory.
+2.  Run the `project.ipynb` notebook. This will train the model and save the `model.pkl` file in the `the-project-pairing-dilemma-app/backend/` directory.
 
-Notes
-- The notebook will try to auto-locate required columns in data.csv by fuzzy/keyword matching; see the console prints for found mappings.
-- If a required column cannot be found, the run stops early and prints available columns.
+### 3. Run the Application
+The application consists of a backend and a frontend, which need to be run separately.
 
-## Data expectations
-The notebook searches for columns that match these concepts (robust to messy headers):
-- introversion_extraversion
-- risk_taking
-- weekly_hobby_hours
-- club_top1
-- teamwork_preference
+**A. Start the Backend (FastAPI)**
+In your terminal, run the following command to start the backend server:
+```bash
+uvicorn the-project-pairing-dilemma-app.backend.main:app --reload
+```
+The backend will be available at `http://127.0.0.1:8000`.
 
-Target binarization
-- Solo = 1–2, Team = 4–5; Neutral (3) dropped for a clean binary task.
+**B. Start the Frontend (Streamlit)**
+Open a **new** terminal window and run this command to launch the Streamlit app:
+```bash
+streamlit run the-project-pairing-dilemma-app/frontend/app.py
+```
+The application will open in your web browser.
 
-## Reproduce results
-- Split: stratified train/test (25% test).
-- Tuning: RandomizedSearchCV with 3-fold CV, scoring=balanced_accuracy.
-- Best model is selected by test balanced accuracy; if probabilistic, a CV-based threshold sweep further tunes the decision threshold.
-
-Outputs
-- Printed metrics per model (Accuracy, Balanced Acc, ROC-AUC) and classification reports.
-- Confusion matrices and an ROC comparison plot.
-- Final summary line with best model and decision threshold (if applicable).
-
-## Custom prediction
-The notebook exposes a helper function:
-- predict_preference(introversion_extraversion, risk_taking, club_top1, weekly_hobby_hours) -> dict with prob_team, pred_label, pred_text
-
-## Troubleshooting
-- Column not found: check data.csv headers; adjust tokens in the notebook’s name_map if needed.
-- Class imbalance: balanced_accuracy and class_weight are used; you can also tweak threshold search ranges.
-- Slow runs: reduce n_iter in RandomizedSearchCV, lower n_estimators for forests, or disable some models.
+## How It Works
+1.  **User Input**: The user fills out a form in the Streamlit app.
+2.  **Prediction Request**: The frontend sends the user's data to the `/predict` endpoint of the FastAPI backend.
+3.  **Data Storage**: The backend appends the new data to `newdata.csv`.
+4.  **Prediction**: The backend uses the loaded `model.pkl` to make a prediction.
+5.  **Display Results**: The frontend displays the prediction ("Solo" or "Team") and the associated probability.
+6.  **Dashboard**: The app provides a link to a dashboard that visualizes the data from `newdata.csv`, providing real-time insights.
 
 ## License
-No license specified. Add one if you plan to share or reuse.
-
+This project is unlicensed. You are free to modify and distribute it.
