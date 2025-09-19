@@ -1,0 +1,10 @@
+.idea/
+# Cache directories
+model_notebook/sklearn_cache/
+__pycache__/
+
+# Compiled Python files
+*.pyc
+
+# Model files
+*.pkl
