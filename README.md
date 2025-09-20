@@ -58,11 +58,18 @@ streamlit run the-project-pairing-dilemma-app\frontend\app.py
 ### B) Split Frontend + Backend (FastAPI)
 Use this if you want to keep a separate API service (e.g., deploying FastAPI to Render/Railway/Azure, and the Streamlit app calls that URL).
 
-- Start the backend locally (Windows cmd):
+- Start the backend locally from the repository root:
 
+Windows (cmd):
 ```cmd
-cd /d "C:\Users\Mitudru\Documents\ML Project\TheProjectPairing Dilemma\the-project-pairing-dilemma-app\backend"
+cd the-project-pairing-dilemma-app\backend
 python -m uvicorn main:app --host 127.0.0.1 --port 8000
+```
+
+macOS/Linux (bash/zsh):
+```bash
+cd the-project-pairing-dilemma-app/backend
+uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
 - Start the frontend locally:
