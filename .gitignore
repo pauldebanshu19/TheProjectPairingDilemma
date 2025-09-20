@@ -8,3 +8,5 @@ __pycache__/
 
 # Model files
 *.pkl
+# Allow the deployed model artifact
+!the-project-pairing-dilemma-app/backend/model.pkl
